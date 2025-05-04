@@ -1,5 +1,6 @@
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
+import { AlertTriangle } from "lucide-react"; // Importación añadida
 
 const SatelliteMonitoring = ({ satellite }) => {
   const performanceData = [

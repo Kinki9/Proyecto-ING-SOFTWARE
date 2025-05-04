@@ -1,5 +1,6 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { motion } from "framer-motion";
+import { AlertTriangle } from "lucide-react"; // Importación añadida
 
 const environmentalData = [
   { month: "Ene", co2: 450, waste: 120, energy: 850 },
