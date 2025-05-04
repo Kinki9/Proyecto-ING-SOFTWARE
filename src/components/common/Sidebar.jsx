@@ -7,7 +7,7 @@ const SIDEBAR_ITEMS = [
 	{ name: "LoginPage", icon: LogInIcon, color: "#6EE7B7", href: "/LoginPage" },
 
 	{
-		name: "Overview",
+		name: "General",
 		icon: BarChart2,
 		color: "#6366f1",
 		href: "/",

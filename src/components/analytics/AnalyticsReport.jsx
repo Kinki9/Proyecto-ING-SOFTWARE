@@ -112,7 +112,7 @@ const AnalyticsReport = ({ timeRange }) => {
         <View style={styles.header}>
           <Image src={logo} style={styles.logo} />
           <View>
-            <Text style={styles.title}>Reporte Aeroespacial</Text>
+            <Text style={styles.title}>Reporte de actividad</Text>
             <Text style={styles.subtitle}>
               Período: {timeRangeText} | Generado el: {new Date().toLocaleDateString()}
             </Text>
