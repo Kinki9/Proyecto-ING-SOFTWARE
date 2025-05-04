@@ -1,21 +1,20 @@
+import { useState, useEffect } from "react";
 import { MessageCircle, Users, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 import Header from "../components/common/Header";
 import StatCard from "../components/common/StatCard";
 import CommentsSection from "../components/forum/CommentsSection";
-import PostsSection from "../components/forum/PostSection";
+import PostSection from "../components/forum/PostSection";
 import GroupsSection from "../components/forum/GroupsSection";
 
 const ForumPage = () => {
-  // Estadísticas dinámicas basadas en datos reales
   const [forumStats, setForumStats] = useState({
     totalComments: 0,
     totalPosts: 0,
     totalGroups: 0
   });
 
-  // Efecto para cargar estadísticas
   useEffect(() => {
     const comments = JSON.parse(localStorage.getItem("forumComments") || "[]");
     const posts = JSON.parse(localStorage.getItem("forumPosts") || "[]");
@@ -27,6 +26,27 @@ const ForumPage = () => {
       totalGroups: groups.length
     });
   }, []);
+
+  const handleNewComment = () => {
+    setForumStats(prev => ({
+      ...prev,
+      totalComments: prev.totalComments + 1
+    }));
+  };
+
+  const handleNewPost = () => {
+    setForumStats(prev => ({
+      ...prev,
+      totalPosts: prev.totalPosts + 1
+    }));
+  };
+
+  const handleNewGroup = () => {
+    setForumStats(prev => ({
+      ...prev,
+      totalGroups: prev.totalGroups + 1
+    }));
+  };
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
@@ -64,9 +84,9 @@ const ForumPage = () => {
         </motion.div>
 
         {/* Secciones del foro */}
-        <PostsSection onNewPost={() => setForumStats(prev => ({...prev, totalPosts: prev.totalPosts + 1}))} />
-        <CommentsSection onNewComment={() => setForumStats(prev => ({...prev, totalComments: prev.totalComments + 1}))} />
-        <GroupsSection onNewGroup={() => setForumStats(prev => ({...prev, totalGroups: prev.totalGroups + 1}))} />
+        <PostSection onNewPost={handleNewPost} />
+        <CommentsSection onNewComment={handleNewComment} />
+        <GroupsSection onNewGroup={handleNewGroup} />
       </main>
     </div>
   );
