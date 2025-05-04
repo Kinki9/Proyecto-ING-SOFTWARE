@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 
 import Header from "../components/common/Header";
 import StatCard from "../components/common/StatCard";
-import UsersTable from "../components/users/UsersTable";
-import UserGrowthChart from "../components/users/UserGrowthChart";
-import UserActivityHeatmap from "../components/users/UserActivityHeatmap";
-import UserDemographicsChart from "../components/users/UserDemographicsChart";
+import UsersTable from "../components/forum/UsersTable";
+import UserGrowthChart from "../components/forum/UserGrowthChart";
+import UserActivityHeatmap from "../components/forum/UserActivityHeatmap";
+import UserDemographicsChart from "../components/forum/UserDemographicsChart";
+import ForumPage from "./ForumPage";
 
 const userStats = {
 	totalUsers: 152845,
@@ -56,4 +57,4 @@ const UsersPage = () => {
 		</div>
 	);
 };
-export default UsersPage;
+export default ForumPage;

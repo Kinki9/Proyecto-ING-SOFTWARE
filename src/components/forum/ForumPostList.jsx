@@ -1,5 +1,5 @@
 // components/forum/ForumPostList.jsx
-import ForumPost from "./ForumPost";
+import ForumPost from "components/forum/ForumPost";
 
 const ForumPostList = ({ posts }) => {
   if (!posts || posts.length === 0) {
