@@ -10,6 +10,18 @@ const SatelliteMonitoring = ({ satellite }) => {
     { subject: 'Propulsión', A: satellite ? 75 : 0, fullMark: 150 },
   ];
 
+  {alert.satellite?.id === satellite?.id && (
+    <div className="mt-4 p-3 bg-red-900 bg-opacity-30 border border-red-700 rounded-lg flex items-start">
+      <AlertTriangle className="text-red-500 mr-3 mt-1 flex-shrink-0" />
+      <div>
+        <h4 className="font-medium text-red-300">Alerta crítica</h4>
+        <p className="text-sm text-red-200">
+          {alert.message} - {new Date(alert.timestamp).toLocaleTimeString()}
+        </p>
+      </div>
+    </div>
+  )}
+
   return (
     <motion.div
       className='bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700'

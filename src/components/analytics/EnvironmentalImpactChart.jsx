@@ -57,4 +57,12 @@ const EnvironmentalImpactChart = () => {
   );
 };
 
+// Agrega al final del componente, antes del export:
+<div className="mt-4">
+  <div className="flex items-center text-sm text-gray-400">
+    <AlertTriangle className="text-yellow-500 mr-1 size-4" />
+    <span>Alerta: Emisiones de CO₂ aumentaron 5% en la última semana</span>
+  </div>
+</div>
+
 export default EnvironmentalImpactChart;
