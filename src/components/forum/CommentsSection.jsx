@@ -90,7 +90,7 @@ const CommentsSection = ({ onNewComment }) => {
       {/* Formulario de nuevo comentario */}
       <form
         onSubmit={handleAddComment}
-        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-white"
+        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-slate-700"
         aria-label="Agregar nuevo comentario"
       >
         <h3 className="text-lg font-medium text-gray-800 mb-3">Nuevo Comentario</h3>

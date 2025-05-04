@@ -94,7 +94,7 @@ const PostSection = ({ onNewPost }) => {
         <select
           value={selectedGroup}
           onChange={(e) => setSelectedGroup(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
         >
           <option value="Todas">Todos los grupos</option>
           {availableGroups.map(group => (
@@ -106,7 +106,7 @@ const PostSection = ({ onNewPost }) => {
       {/* Formulario creación de publicación */}
       <form
         onSubmit={handleAddPost}
-        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-white"
+        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-slate-500"
         aria-label="Agregar nueva publicación"
       >
         <h3 className="text-lg font-medium text-gray-800 mb-3">Nueva Publicación</h3>
@@ -118,7 +118,7 @@ const PostSection = ({ onNewPost }) => {
             placeholder="Tu nombre y cargo"
             value={newPost.author}
             onChange={handleChange}
-            className="flex-1 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
             required
             aria-label="Nombre del autor"
           />
@@ -127,7 +127,7 @@ const PostSection = ({ onNewPost }) => {
             name="group"
             value={newPost.group}
             onChange={handleChange}
-            className="w-48 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-48 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
             aria-label="Grupo de la publicación"
           >
             <option value="">Selecciona un grupo (opcional)</option>
@@ -143,18 +143,18 @@ const PostSection = ({ onNewPost }) => {
           placeholder="Título de la publicación (ej: 'Problema con sistema de navegación')"
           value={newPost.title}
           onChange={handleChange}
-          className="w-full border border-gray-300 rounded px-3 py-2 mt-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-gray-300 rounded px-3 py-2 mt-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
           required
           aria-label="Título de la publicación"
         />
 
         <div className="mt-3 flex items-center">
-          <label className="mr-2 text-sm font-medium text-gray-700">Prioridad:</label>
+          <label className="mr-2 text-sm font-medium text-gray-800">Prioridad:</label>
           <select
             name="priority"
             value={newPost.priority}
             onChange={handleChange}
-            className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
           >
             <option value="normal">Normal</option>
             <option value="media">Media</option>
@@ -168,7 +168,7 @@ const PostSection = ({ onNewPost }) => {
           value={newPost.content}
           onChange={handleChange}
           rows={4}
-          className="w-full border border-gray-300 rounded px-3 py-2 mt-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-gray-300 rounded px-3 py-2 mt-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
           required
           aria-label="Contenido de la publicación"
         />

@@ -83,7 +83,7 @@ const GroupsSection = ({ onNewGroup }) => {
           placeholder="Buscar grupo por nombre o área..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full md:w-1/2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full md:w-1/2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
           aria-label="Buscar grupo por nombre o área"
         />
       </div>
@@ -91,7 +91,7 @@ const GroupsSection = ({ onNewGroup }) => {
       {/* Formulario agregar nuevo grupo */}
       <form
         onSubmit={handleAddGroup}
-        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-white"
+        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-slate-700"
         aria-label="Agregar nuevo grupo"
       >
         <h3 className="text-lg font-medium text-gray-800 mb-3">Crear Nuevo Grupo</h3>
@@ -102,7 +102,7 @@ const GroupsSection = ({ onNewGroup }) => {
           placeholder="Nombre del grupo (ej: Equipo de Cohetes)"
           value={newGroup.name}
           onChange={handleChange}
-          className="w-full border border-gray-300 rounded px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-gray-300 rounded px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
           required
           aria-label="Nombre del grupo"
         />
