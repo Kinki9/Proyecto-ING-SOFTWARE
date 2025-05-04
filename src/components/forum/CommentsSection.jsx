@@ -62,20 +62,20 @@ const CommentsSection = ({ onNewComment }) => {
 
   return (
     <section className="mb-10">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Discusiones</h2>
-      <p className="text-gray-600 mb-4">Participa en conversaciones técnicas y colaborativas</p>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-500">Discusiones</h2>
+      <p className="text-gray-500 mb-4">Participa en conversaciones técnicas y colaborativas</p>
 
       {/* Filtros */}
       <div className="flex flex-col md:flex-row md:items-center md:space-x-4 mb-4">
         <div className="mb-2 md:mb-0">
-          <label htmlFor="filterPost" className="mr-2 font-medium text-gray-700">
+          <label htmlFor="filterPost" className="mr-2 font-medium text-gray-500">
             Filtrar por publicación:
           </label>
           <select
             id="filterPost"
             value={filterPost}
             onChange={(e) => setFilterPost(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1"
+            className="border border-gray-300 rounded px-2 py-1 text-gray-700"
           >
             <option value="Todas">Todas las discusiones</option>
             {availablePosts.map((post) => (
@@ -90,7 +90,7 @@ const CommentsSection = ({ onNewComment }) => {
       {/* Formulario de nuevo comentario */}
       <form
         onSubmit={handleAddComment}
-        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-slate-700"
+        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-slate-500"
         aria-label="Agregar nuevo comentario"
       >
         <h3 className="text-lg font-medium text-gray-800 mb-3">Nuevo Comentario</h3>
@@ -102,7 +102,7 @@ const CommentsSection = ({ onNewComment }) => {
             placeholder="Tu nombre y cargo"
             value={newComment.author}
             onChange={handleChange}
-            className="flex-1 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
             aria-label="Nombre del autor"
             required
           />
@@ -111,7 +111,7 @@ const CommentsSection = ({ onNewComment }) => {
             name="postId"
             value={newComment.postId}
             onChange={handleChange}
-            className="w-48 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-48 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
             aria-label="Publicación relacionada"
           >
             <option value="">Publicación general (opcional)</option>
@@ -129,7 +129,7 @@ const CommentsSection = ({ onNewComment }) => {
           value={newComment.text}
           onChange={handleChange}
           rows={3}
-          className="w-full mt-3 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full mt-3 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
           aria-label="Texto del comentario"
           required
         />

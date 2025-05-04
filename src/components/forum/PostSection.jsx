@@ -87,14 +87,14 @@ const PostSection = ({ onNewPost }) => {
     <section className="mb-10">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800">Publicaciones</h2>
-          <p className="text-gray-600">Anuncios, consultas y discusiones técnicas</p>
+          <h2 className="text-2xl font-semibold text-gray-500">Publicaciones</h2>
+          <p className="text-gray-500">Anuncios, consultas y discusiones técnicas</p>
         </div>
         
         <select
           value={selectedGroup}
           onChange={(e) => setSelectedGroup(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
+          className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
         >
           <option value="Todas">Todos los grupos</option>
           {availableGroups.map(group => (
