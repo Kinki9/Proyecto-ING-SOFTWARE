@@ -1,39 +1,58 @@
-// pages/ForumPage.jsx
-import { useState } from "react";
-import ForumGroupSelector from "/components/forum/ForumGroupSelector";
-import ForumCreatePost from "../components/forum/ForumCreatePost";
-import ForumPostList from "../components/forum/ForumPostList";
+import { MessageCircle, Users, FileText, UsersIcon } from "lucide-react";
+import { motion } from "framer-motion";
+
+import Header from "../components/common/Header";
+import StatCard from "../components/common/StatCard";
+import CommentsSection from "../components/forum/ForumComments";
+import PostsSection from "../components/forum/PostSection";
+import GroupsSection from "../components/forum/ForumGroup";
+
+const forumStats = {
+	totalComments: 1200,
+	totalPosts: 300,
+	totalGroups: 15,
+};
 
 const ForumPage = () => {
-  const [posts, setPosts] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState("Todos");
+	return (
+		<div className='flex-1 overflow-auto relative z-10'>
+			<Header title='Foro de Comunicación' />
 
-  const handleNewPost = (content) => {
-    const newPost = {
-      author: "Trabajador", // Reemplazar por nombre de usuario si lo integras con autenticación
-      content,
-      date: new Date().toLocaleString(),
-      group: selectedGroup
-    };
-    setPosts([newPost, ...posts]);
-  };
+			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
+				{/* STATS */}
+				<motion.div
+					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8'
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 1 }}
+				>
+					<StatCard
+						name='Total de Comentarios'
+						icon={MessageCircle}
+						value={forumStats.totalComments.toLocaleString()}
+						color='#6366F1'
+					/>
+					<StatCard
+						name='Total de Publicaciones'
+						icon={FileText}
+						value={forumStats.totalPosts.toLocaleString()}
+						color='#10B981'
+					/>
+					<StatCard
+						name='Total de Grupos'
+						icon={Users}
+						value={forumStats.totalGroups.toLocaleString()}
+						color='#F59E0B'
+					/>
+				</motion.div>
 
-  const handleGroupChange = (group) => {
-    setSelectedGroup(group);
-  };
-
-  const filteredPosts =
-    selectedGroup === "Todos"
-      ? posts
-      : posts.filter((post) => post.group === selectedGroup);
-
-  return (
-    <div className="max-w-4xl mx-auto space-y-6 py-8 px-4">
-      <ForumGroupSelector onSelect={handleGroupChange} />
-      <ForumCreatePost onPost={handleNewPost} />
-      <ForumPostList posts={filteredPosts} />
-    </div>
-  );
+				{/* SECCIONES DEL FORO */}
+				<CommentsSection />
+				<PostsSection />
+				<GroupsSection />
+			</main>
+		</div>
+	);
 };
 
 export default ForumPage;
