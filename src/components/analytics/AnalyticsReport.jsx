@@ -1,4 +1,5 @@
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import logo from '../assets/logo.svg';
 
 // Estilos para el PDF
 const styles = StyleSheet.create({
@@ -16,8 +17,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   logo: {
-    width: 120,
-    height: 40
+    width: 100,
+    height: 30,
   },
   title: {
     fontSize: 24,
