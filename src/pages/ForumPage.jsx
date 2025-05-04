@@ -3,56 +3,73 @@ import { motion } from "framer-motion";
 
 import Header from "../components/common/Header";
 import StatCard from "../components/common/StatCard";
-import CommentsSection from "../components/forum/ForumComments";
+import CommentsSection from "../components/forum/CommentsSection";
 import PostsSection from "../components/forum/PostSection";
-import GroupsSection from "../components/forum/ForumGroup";
-
-const forumStats = {
-	totalComments: 1200,
-	totalPosts: 300,
-	totalGroups: 15,
-};
+import GroupsSection from "../components/forum/GroupsSection";
 
 const ForumPage = () => {
-	return (
-		<div className="flex-1 overflow-auto relative z-10">
-			<Header title="Foro de Comunicación" />
+  // Estadísticas dinámicas basadas en datos reales
+  const [forumStats, setForumStats] = useState({
+    totalComments: 0,
+    totalPosts: 0,
+    totalGroups: 0
+  });
 
-			<main className="max-w-7xl mx-auto py-6 px-4 lg:px-8 space-y-10">
-				{/* Estadísticas principales */}
-				<motion.div
-					className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 1 }}
-				>
-					<StatCard
-						name="Total de Comentarios"
-						icon={MessageCircle}
-						value={forumStats.totalComments.toLocaleString()}
-						color="#6366F1"
-					/>
-					<StatCard
-						name="Total de Publicaciones"
-						icon={FileText}
-						value={forumStats.totalPosts.toLocaleString()}
-						color="#10B981"
-					/>
-					<StatCard
-						name="Total de Grupos"
-						icon={Users}
-						value={forumStats.totalGroups.toLocaleString()}
-						color="#F59E0B"
-					/>
-				</motion.div>
+  // Efecto para cargar estadísticas
+  useEffect(() => {
+    const comments = JSON.parse(localStorage.getItem("forumComments") || "[]");
+    const posts = JSON.parse(localStorage.getItem("forumPosts") || "[]");
+    const groups = JSON.parse(localStorage.getItem("forumGroups") || "[]");
+    
+    setForumStats({
+      totalComments: comments.length,
+      totalPosts: posts.length,
+      totalGroups: groups.length
+    });
+  }, []);
 
-				{/* Secciones del foro */}
-				<CommentsSection />
-				<PostsSection />
-				<GroupsSection />
-			</main>
-		</div>
-	);
+  return (
+    <div className="flex-1 overflow-auto relative z-10">
+      <Header title="Comunicación Aeroespacial" subtitle="Foro interno para colaboración entre áreas" />
+
+      <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8 space-y-10">
+        {/* Estadísticas principales */}
+        <motion.div
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <StatCard
+            name="Comentarios"
+            icon={MessageCircle}
+            value={forumStats.totalComments.toLocaleString()}
+            color="#6366F1"
+            description="Interacciones en discusiones"
+          />
+          <StatCard
+            name="Publicaciones"
+            icon={FileText}
+            value={forumStats.totalPosts.toLocaleString()}
+            color="#10B981"
+            description="Temas y anuncios publicados"
+          />
+          <StatCard
+            name="Grupos de Trabajo"
+            icon={Users}
+            value={forumStats.totalGroups.toLocaleString()}
+            color="#F59E0B"
+            description="Equipos por área especializada"
+          />
+        </motion.div>
+
+        {/* Secciones del foro */}
+        <PostsSection onNewPost={() => setForumStats(prev => ({...prev, totalPosts: prev.totalPosts + 1}))} />
+        <CommentsSection onNewComment={() => setForumStats(prev => ({...prev, totalComments: prev.totalComments + 1}))} />
+        <GroupsSection onNewGroup={() => setForumStats(prev => ({...prev, totalGroups: prev.totalGroups + 1}))} />
+      </main>
+    </div>
+  );
 };
 
 export default ForumPage;

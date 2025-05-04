@@ -1,134 +1,252 @@
-import React, { useState } from "react";
-import { FileText, PlusCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
-const PostsSection = () => {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "Actualización del protocolo de seguridad",
-      author: "Carlos Méndez",
-      content:
-        "Se ha implementado un nuevo protocolo para mejorar la seguridad en las operaciones aeroespaciales. Por favor, revisen el documento adjunto y sigan las indicaciones para evitar incidentes.",
-      date: new Date("2024-06-03T09:00:00"),
-    },
-    {
-      id: 2,
-      title: "Solicitud de apoyo para calibración de sensores",
-      author: "Lucía Fernández",
-      content:
-        "Necesitamos apoyo urgente para calibrar los sensores de navegación en el área de lanzamiento. Quienes puedan asistir, por favor contáctenme directamente.",
-      date: new Date("2024-06-04T11:30:00"),
-    },
-  ]);
-  const [newTitle, setNewTitle] = useState("");
-  const [newContent, setNewContent] = useState("");
+const PostSection = ({ onNewPost }) => {
+  const [posts, setPosts] = useState(() => {
+    const saved = localStorage.getItem("forumPosts");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [newPost, setNewPost] = useState({
+    author: "",
+    group: "",
+    title: "",
+    content: "",
+    priority: "normal" // nuevo campo para prioridad
+  });
+
   const [expandedPostId, setExpandedPostId] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState("Todas");
+
+  // Obtener grupos existentes para el selector
+  const [availableGroups, setAvailableGroups] = useState([]);
+
+  useEffect(() => {
+    const groups = JSON.parse(localStorage.getItem("forumGroups") || "[]");
+    setAvailableGroups(groups.map(g => g.name));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("forumPosts", JSON.stringify(posts));
+  }, [posts]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewPost((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleAddPost = (e) => {
     e.preventDefault();
-    const trimmedTitle = newTitle.trim();
-    const trimmedContent = newContent.trim();
-    if (!trimmedTitle || !trimmedContent) return;
+    if (!newPost.author.trim() || !newPost.title.trim() || !newPost.content.trim()) {
+      alert("Por favor, complete todos los campos requeridos.");
+      return;
+    }
 
-    const post = {
+    const postToAdd = {
       id: Date.now(),
-      title: trimmedTitle,
-      author: "Usuario Actual", // Cambiar según sea necesario
-      content: trimmedContent,
-      date: new Date(),
+      author: newPost.author.trim(),
+      group: newPost.group || "General",
+      title: newPost.title.trim(),
+      content: newPost.content.trim(),
+      priority: newPost.priority,
+      timestamp: new Date().toISOString(),
+      comments: 0
     };
 
-    setPosts([post, ...posts]);
-    setNewTitle("");
-    setNewContent("");
-    setExpandedPostId(post.id); // expandir el post recién creado
+    setPosts((prev) => [postToAdd, ...prev]);
+    setNewPost({
+      author: "",
+      group: "",
+      title: "",
+      content: "",
+      priority: "normal"
+    });
+    setExpandedPostId(postToAdd.id);
+    onNewPost(); // Notificar a ForumPage del nuevo post
   };
 
   const toggleExpand = (id) => {
-    setExpandedPostId(expandedPostId === id ? null : id);
+    setExpandedPostId((prev) => (prev === id ? null : id));
   };
 
-  const formatDate = (date) =>
-    date.toLocaleString("es-ES", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
+  const truncateText = (text, maxLength = 150) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+  const filteredPosts = selectedGroup === "Todas" 
+    ? posts 
+    : posts.filter(post => post.group === selectedGroup);
+
+  const priorityColors = {
+    alta: "bg-red-50 border-red-200",
+    media: "bg-yellow-50 border-yellow-200",
+    normal: "bg-white border-gray-200"
+  };
 
   return (
-    <section className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Publicaciones</h2>
+    <section className="mb-10">
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-800">Publicaciones</h2>
+          <p className="text-gray-600">Anuncios, consultas y discusiones técnicas</p>
+        </div>
+        
+        <select
+          value={selectedGroup}
+          onChange={(e) => setSelectedGroup(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          <option value="Todas">Todos los grupos</option>
+          {availableGroups.map(group => (
+            <option key={group} value={group}>{group}</option>
+          ))}
+        </select>
+      </div>
 
-      <form onSubmit={handleAddPost} className="mb-6 space-y-4">
+      {/* Formulario creación de publicación */}
+      <form
+        onSubmit={handleAddPost}
+        className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-white"
+        aria-label="Agregar nueva publicación"
+      >
+        <h3 className="text-lg font-medium text-gray-800 mb-3">Nueva Publicación</h3>
+        
+        <div className="flex flex-col md:flex-row md:space-x-4">
+          <input
+            type="text"
+            name="author"
+            placeholder="Tu nombre y cargo"
+            value={newPost.author}
+            onChange={handleChange}
+            className="flex-1 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+            aria-label="Nombre del autor"
+          />
+          
+          <select
+            name="group"
+            value={newPost.group}
+            onChange={handleChange}
+            className="w-48 border border-gray-300 rounded px-3 py-2 mb-3 md:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            aria-label="Grupo de la publicación"
+          >
+            <option value="">Selecciona un grupo (opcional)</option>
+            {availableGroups.map((group) => (
+              <option key={group} value={group}>{group}</option>
+            ))}
+          </select>
+        </div>
+
         <input
           type="text"
-          placeholder="Título de la publicación"
-          className="w-full p-3 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
+          name="title"
+          placeholder="Título de la publicación (ej: 'Problema con sistema de navegación')"
+          value={newPost.title}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded px-3 py-2 mt-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           required
-          maxLength={100}
+          aria-label="Título de la publicación"
         />
+
+        <div className="mt-3 flex items-center">
+          <label className="mr-2 text-sm font-medium text-gray-700">Prioridad:</label>
+          <select
+            name="priority"
+            value={newPost.priority}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="normal">Normal</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+
         <textarea
-          rows="4"
-          placeholder="Contenido de la publicación"
-          className="w-full p-3 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-          value={newContent}
-          onChange={(e) => setNewContent(e.target.value)}
+          name="content"
+          placeholder="Describe tu publicación con detalle. Incluye datos técnicos si es necesario..."
+          value={newPost.content}
+          onChange={handleChange}
+          rows={4}
+          className="w-full border border-gray-300 rounded px-3 py-2 mt-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           required
-          maxLength={1000}
+          aria-label="Contenido de la publicación"
         />
+
         <button
           type="submit"
-          disabled={!newTitle.trim() || !newContent.trim()}
-          className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-sm font-medium rounded-md transition"
+          className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
         >
-          <PlusCircle className="mr-2 h-5 w-5" />
-          Publicar
+          Publicar en el foro
         </button>
       </form>
 
-      <div className="divide-y divide-gray-200 dark:divide-gray-700 max-h-[480px] overflow-y-auto">
-        {posts.length === 0 && (
-          <p className="text-gray-500 dark:text-gray-400 text-center">No hay publicaciones aún.</p>
-        )}
-        {posts.map(({ id, title, author, content, date }) => {
-          const isExpanded = expandedPostId === id;
-          const preview = content.length > 150 ? content.slice(0, 150) + "..." : content;
-
-          return (
-            <article
-              key={id}
-              className="py-5 cursor-pointer"
-              onClick={() => toggleExpand(id)}
-              aria-expanded={isExpanded}
-            >
-              <header className="flex justify-between items-center mb-1">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
-                <time
-                  dateTime={date.toISOString()}
-                  className="text-xs text-gray-500 dark:text-gray-400"
-                >
-                  {formatDate(date)}
-                </time>
-              </header>
-              <p className="text-sm text-gray-800 dark:text-gray-200 mb-1">{isExpanded ? content : preview}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Por {author}</p>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleExpand(id);
+      {/* Lista de publicaciones */}
+      <div className="space-y-6 max-h-[500px] overflow-auto">
+        {filteredPosts.length === 0 ? (
+          <p className="text-gray-600 p-4 bg-gray-50 rounded-lg text-center">
+            {selectedGroup === "Todas" 
+              ? "No hay publicaciones aún." 
+              : `No hay publicaciones en el grupo ${selectedGroup}.`}
+          </p>
+        ) : (
+          filteredPosts.map(({ id, author, group, title, content, priority, timestamp }) => {
+            const isExpanded = expandedPostId === id;
+            return (
+              <article
+                key={id}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${priorityColors[priority]} ${isExpanded ? 'shadow-md' : 'shadow-sm'}`}
+                aria-expanded={isExpanded}
+                aria-label={`Publicación: ${title} por ${author}`}
+                tabIndex={0}
+                onClick={() => toggleExpand(id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggleExpand(id);
+                  }
                 }}
-                className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold mt-1"
               >
-                {isExpanded ? "Mostrar menos" : "Leer más"}
-              </button>
-            </article>
-          );
-        })}
+                <header className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="font-semibold text-indigo-700">{title}</h3>
+                    <p className="text-sm text-gray-600">{author}</p>
+                  </div>
+                  <div className="text-right">
+                    {group && (
+                      <span className="inline-block px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full mb-1">
+                        {group}
+                      </span>
+                    )}
+                    <time
+                      className="text-xs text-gray-400 block"
+                      dateTime={timestamp}
+                      title={new Date(timestamp).toLocaleString()}
+                    >
+                      {new Date(timestamp).toLocaleString()}
+                    </time>
+                  </div>
+                </header>
+                
+                <p className="text-gray-700 whitespace-pre-line">
+                  {isExpanded ? content : truncateText(content)}
+                </p>
+                
+                <div className="flex justify-between items-center mt-3">
+                  <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                    Comentar ({Math.floor(Math.random() * 10)})
+                  </button>
+                  <p className="text-sm font-medium">
+                    {isExpanded ? "Mostrar menos ▲" : "Mostrar más ▼"}
+                  </p>
+                </div>
+              </article>
+            );
+          })
+        )}
       </div>
     </section>
   );
 };
 
-export default PostsSection;
+export default PostSection;
