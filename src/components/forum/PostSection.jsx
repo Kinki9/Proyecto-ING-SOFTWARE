@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CommentsSection from "./CommentsSection";
+import { motion } from "framer-motion";
 
 const PostSection = ({ groupId, onNewPost }) => {
   const [posts, setPosts] = useState([]);
@@ -39,16 +40,16 @@ const PostSection = ({ groupId, onNewPost }) => {
 
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">Publicaciones del Grupo</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Publicaciones del Grupo</h2>
 
-      <form onSubmit={handleSubmit} className="text-black mb-6 space-y-4">
+      <form onSubmit={handleSubmit} className="mb-6 space-y-4">
         <input
           type="text"
           name="title"
           value={newPost.title}
           onChange={handleChange}
           placeholder="Título"
-          className="w-full border px-3 py-2 rounded"
+          className="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           required
         />
         <textarea
@@ -56,40 +57,49 @@ const PostSection = ({ groupId, onNewPost }) => {
           value={newPost.content}
           onChange={handleChange}
           placeholder="Contenido"
-          className="w-full border px-3 py-2 rounded"
+          className="w-full bg-gray-700 border border-gray-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           rows={4}
           required
         />
-        <button
+        <motion.button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
         >
           Publicar
-        </button>
+        </motion.button>
       </form>
 
       {filteredPosts.length === 0 ? (
-        <p className="text-gray-600">No hay publicaciones aún en este grupo.</p>
+        <p className="text-gray-400">No hay publicaciones aún en este grupo.</p>
       ) : (
         filteredPosts.map((post) => (
-          <article key={post.id} className="mb-6 p-4 border rounded shadow">
+          <motion.article 
+            key={post.id} 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-gray-700 rounded-lg shadow"
+          >
             <header className="flex justify-between mb-2">
-              <h3 className="font-semibold text-indigo-700">{post.title}</h3>
-              <time className="text-xs text-gray-500">
+              <h3 className="font-semibold text-indigo-400">{post.title}</h3>
+              <time className="text-xs text-gray-400">
                 {new Date(post.timestamp).toLocaleString()}
               </time>
             </header>
 
-            <p className="mb-3">{post.content}</p>
+            <p className="mb-3 text-gray-300">{post.content}</p>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() =>
                 setActiveCommentPostId((prev) => (prev === post.id ? null : post.id))
               }
-              className="text-sm text-indigo-600 hover:underline mb-3"
+              className="text-sm text-indigo-400 hover:text-indigo-300 mb-3"
             >
               {activeCommentPostId === post.id ? "Ocultar comentarios" : "Comentar"}
-            </button>
+            </motion.button>
 
             {activeCommentPostId === post.id && (
               <CommentsSection
@@ -99,7 +109,7 @@ const PostSection = ({ groupId, onNewPost }) => {
                 embedded={true}
               />
             )}
-          </article>
+          </motion.article>
         ))
       )}
     </section>
